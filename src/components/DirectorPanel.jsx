@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useStudio } from '../context/StudioContext';
+import { useStudio } from '../Context/StudioContext';
 import { Sparkles, Send, History, Eraser, Keyboard, Zap, AlertCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';

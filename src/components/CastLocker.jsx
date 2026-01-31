@@ -1,4 +1,4 @@
-import { useStudio } from '../context/StudioContext';
+import { useStudio } from '../Context/StudioContext';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 

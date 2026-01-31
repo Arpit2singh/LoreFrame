@@ -1,4 +1,4 @@
-import { useStudio } from '../context/StudioContext';
+import { useStudio } from '../Context/StudioContext';
 import { Sparkles, Send, Eraser, Keyboard, Zap } from 'lucide-react';
 import { useRef } from 'react';
 

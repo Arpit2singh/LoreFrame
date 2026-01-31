@@ -1,5 +1,5 @@
 import React from 'react';
-import { StudioProvider } from '../context/StudioContext';
+import { StudioProvider } from '../Context/StudioContext.jsx';
 import { ToastContainer } from 'react-toastify';
 
 import StudioDashboard from '../StudioDashboard';

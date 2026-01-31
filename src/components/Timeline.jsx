@@ -1,4 +1,4 @@
-import { useStudio } from '../context/StudioContext';
+import { useStudio } from '../Context/StudioContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Film, Maximize2, Download, X, Clock, Trash2, Copy, Loader2, ImageOff, CheckCircle2, Play, Pause } from 'lucide-react';
 import Hyperspeed from './ReactBits/HyperSpeed/HyperSpeed';
