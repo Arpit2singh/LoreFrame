@@ -1,15 +1,16 @@
 import { useStudio } from '../Context/StudioContext';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Film, Maximize2, Download, X, Clock, Trash2, Copy, Loader2, ImageOff, CheckCircle2, Play, Pause, Wand2 } from 'lucide-react';
 import Hyperspeed from './ReactBits/HyperSpeed/HyperSpeed';
 import { useState, useRef, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { cn } from '../lib/utils'; 
-import DoodleMovieWatcher from './skiper/DoodleMovieWatcher'; 
+import { cn } from '../lib/utils';
+import DoodleMovieWatcher from './skiper/DoodleMovieWatcher';
 import DoodleTv from './skiper/DoodleTv';
 import SmartEditor from './SmartEditor'; // <--- IMPORT YOUR EDITOR HERE
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // --- HELPER: Convert URL to File for FFmpeg ---
 async function urlToFile(url, filename, mimeType) {
@@ -86,7 +87,7 @@ const RobustMedia = ({ src, alt, onPreview }) => {
   };
 
   return (
-    <div 
+    <div
       className="relative w-full h-full bg-[#1C1C1E] cursor-pointer"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -155,9 +156,9 @@ const RobustMedia = ({ src, alt, onPreview }) => {
 // 🎬 MAIN COMPONENT
 // ------------------------------------------------------------------
 export default function Timeline() {
-  const { timeline, setTimeline, prompt, isGenerating } = useStudio(); 
-  const [previewMedia, setPreviewMedia] = useState(null); 
-  
+  const { timeline, setTimeline, prompt, isGenerating } = useStudio();
+  const [previewMedia, setPreviewMedia] = useState(null);
+
   // --- NEW: State for Editor ---
   const [editingMedia, setEditingMedia] = useState(null); // Stores the file object for the editor
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -183,7 +184,7 @@ export default function Timeline() {
 
       const isVideo = url.match(/\.(mp4|webm|ogg|mov)$/i);
       toast.success(isVideo ? "Video downloaded" : "Image downloaded");
-      
+
     } catch (err) {
       console.error('Download failed:', err);
       toast.error("Download failed");
@@ -191,7 +192,7 @@ export default function Timeline() {
   };
 
   const handleDelete = (id) => {
-    if(!id) return;
+    if (!id) return;
     setTimeline(prev => prev.filter(item => (item.id !== id && item.job_id !== id)));
     toast.info("Scene removed from timeline");
   };
@@ -212,7 +213,7 @@ export default function Timeline() {
 
       // Convert URL to File object for the SmartEditor
       const file = await urlToFile(url, filename, mimeType);
-      
+
       setEditingMedia({ file, url, type: isVideo ? 'video' : 'image' });
       setIsEditorOpen(true);
       toast.dismiss(toastId);
@@ -224,7 +225,7 @@ export default function Timeline() {
 
   return (
     <div className="h-full w-full overflow-y-auto formScroll custom-scrollbar relative bg-[#111111]">
-      
+
       {/* Empty State Background Animation */}
       {isLoading && (
         <div className="absolute inset-0 opacity-40 pointer-events-none">
@@ -264,8 +265,8 @@ export default function Timeline() {
             <div className="overflow-hidden w-full">
               <div className="text-[10px] text-blue-400 font-bold uppercase mb-1 tracking-widest flex items-center gap-2">
                 <Loader2 size={10} className={isGenerating ? "animate-spin" : "hidden"} />
-                <RollingText 
-                  text={isGenerating ? "PROCESSING DATA STREAM..." : "NEURAL BUFFER READY"} 
+                <RollingText
+                  text={isGenerating ? "PROCESSING DATA STREAM..." : "NEURAL BUFFER READY"}
                   speed={0.03}
                   className="text-blue-400"
                 />
@@ -289,47 +290,54 @@ export default function Timeline() {
             >
               <div className="absolute flex justify-center items-center inset-0 z-0 opacity-80">
                 <div> <DoodleMovieWatcher /></div>
-                <div> <DoodleTv/></div>               
+                <div> <DoodleTv /></div>
               </div>
             </motion.div>
           ) : (
-            <motion.div className="space-y-8 pb-32 w-full max-w-3xl flex flex-col-reverse"> 
-              
+            <motion.div className="space-y-8 pb-32 w-full max-w-3xl flex flex-col-reverse">
+
               {timeline?.map((scene, index) => {
-                
+
                 const rawUrl = scene.result_url || scene.image || "";
                 let fullMediaUrl = "";
                 if (rawUrl.startsWith("http")) {
-                   fullMediaUrl = rawUrl;
+                  fullMediaUrl = rawUrl;
                 } else if (rawUrl) {
-                   fullMediaUrl = `${API_BASE_URL}${rawUrl}`;
+                  fullMediaUrl = `${API_BASE_URL}${rawUrl}`;
                 }
 
                 const itemId = scene.id || scene.job_id || index;
                 const idrString = scene.idr_score ? `IDR LEVEL: ${(scene.idr_score * 100).toFixed(1)}%` : null;
                 const isNewest = index === 0;
-                
+
                 return (
                   <motion.div
                     layout
                     key={itemId}
-                    initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                    animate={{ 
-                        opacity: 1, 
-                        y: 0, 
-                        scale: isNewest ? 1 : 0.95 + (0.01 * Math.max(0, 5 - index)),
-                        filter: isNewest ? 'blur(0px)' : 'grayscale(30%)',
+                    initial={{ opacity: 0, y: 60, scale: 0.85, rotateX: 5 }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: isNewest ? 1 : 0.96 + (0.01 * Math.max(0, 5 - index)),
+                      rotateX: 0,
+                      filter: isNewest ? 'blur(0px) brightness(1)' : 'grayscale(20%) brightness(0.9)',
                     }}
-                    exit={{ opacity: 0, x: -50, scale: 0.8 }}
-                    transition={{ 
-                        type: "spring", 
-                        stiffness: 150, 
-                        damping: 20, 
-                        mass: 1 
+                    exit={{ opacity: 0, x: -100, scale: 0.7, rotateY: -10 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 25,
+                      mass: 0.8,
+                      delay: index * 0.05
                     }}
+                    whileHover={!isNewest ? {
+                      scale: 0.98,
+                      filter: 'grayscale(0%) brightness(1)',
+                      transition: { duration: 0.3 }
+                    } : undefined}
                     className={cn(
-                        "relative group transition-all duration-500",
-                        isNewest ? "z-30 mb-8" : "z-0 opacity-80 hover:opacity-100 hover:scale-[0.98]"
+                      "relative group transition-all duration-500",
+                      isNewest ? "z-30 mb-8" : "z-0 opacity-80"
                     )}
                   >
                     {/* Scene Header */}
@@ -350,14 +358,14 @@ export default function Timeline() {
                       <div className="flex items-center gap-3">
                         {idrString && (
                           <div className="text-[10px] font-mono text-zinc-500 bg-[#1C1C1E] px-2 py-0.5 rounded border border-zinc-800 flex items-center">
-                            <RollingText 
-                                text={idrString} 
-                                className="text-blue-500 font-bold"
-                                speed={0.02}
+                            <RollingText
+                              text={idrString}
+                              className="text-blue-500 font-bold"
+                              speed={0.02}
                             />
                           </div>
                         )}
-                        <button 
+                        <button
                           onClick={() => handleDelete(itemId)}
                           className="text-zinc-600 hover:text-red-500 transition-colors p-1"
                           title="Remove from timeline"
@@ -369,19 +377,19 @@ export default function Timeline() {
 
                     {/* Media Container */}
                     <div className={cn(
-                        "relative aspect-video rounded-3xl overflow-hidden border bg-[#1C1C1E] shadow-2xl group transition-all",
-                        isNewest ? "border-blue-500/30 shadow-blue-500/10" : "border-zinc-800"
+                      "relative aspect-video rounded-3xl overflow-hidden border bg-[#1C1C1E] shadow-2xl group transition-all",
+                      isNewest ? "border-blue-500/30 shadow-blue-500/10" : "border-zinc-800"
                     )}>
-                      
-                      <RobustMedia 
-                        src={fullMediaUrl} 
-                        alt={scene.prompt} 
+
+                      <RobustMedia
+                        src={fullMediaUrl}
+                        alt={scene.prompt}
                         onPreview={() => setPreviewMedia(fullMediaUrl)}
                       />
 
                       {/* Hover Overlay Controls */}
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-4 backdrop-blur-[2px] z-30">
-                        
+
                         {/* 1. Fullscreen Button */}
                         <button
                           onClick={() => setPreviewMedia(fullMediaUrl)}
@@ -419,7 +427,7 @@ export default function Timeline() {
                           <CheckCircle2 size={10} className="text-green-500/50" />
                           Neural Prompt
                         </p>
-                        <button 
+                        <button
                           onClick={() => handleCopyPrompt(scene.prompt)}
                           className="opacity-0 group-hover/prompt:opacity-100 transition-opacity text-zinc-500 hover:text-blue-400"
                           title="Copy Prompt"
@@ -443,83 +451,89 @@ export default function Timeline() {
       </div>
 
       {/* Fullscreen Preview Modal */}
-      <AnimatePresence>
-        {previewMedia && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setPreviewMedia(null)}
-            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex items-center justify-center p-8 cursor-zoom-out"
-          >
-            <button
+      {createPortal(
+        <AnimatePresence>
+          {previewMedia && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setPreviewMedia(null)}
-              className="absolute top-8 right-8 p-3 bg-zinc-800 hover:bg-red-500 text-white rounded-full transition shadow-xl z-50"
+              className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex items-center justify-center p-8 cursor-zoom-out"
             >
-              <X size={24} />
-            </button>
+              <button
+                onClick={() => setPreviewMedia(null)}
+                className="absolute top-8 right-8 p-3 bg-zinc-800 hover:bg-red-500 text-white rounded-full transition shadow-xl z-50"
+              >
+                <X size={24} />
+              </button>
 
-            {previewMedia.match(/\.(mp4|webm|ogg|mov)$/i) ? (
-               <motion.video
-                 initial={{ scale: 0.9, y: 20 }}
-                 animate={{ scale: 1, y: 0 }}
-                 src={previewMedia}
-                 controls
-                 autoPlay
-                 onClick={(e) => e.stopPropagation()}
-                 className="max-w-full max-h-full rounded-3xl shadow-2xl border border-white/10"
-               />
-            ) : (
-               <motion.img
-                 initial={{ scale: 0.9, y: 20 }}
-                 animate={{ scale: 1, y: 0 }}
-                 src={previewMedia}
-                 onClick={(e) => e.stopPropagation()}
-                 className="max-w-full max-h-full rounded-3xl shadow-2xl border border-white/10"
-               />
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {previewMedia.match(/\.(mp4|webm|ogg|mov)$/i) ? (
+                <motion.video
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  src={previewMedia}
+                  controls
+                  autoPlay
+                  onClick={(e) => e.stopPropagation()}
+                  className="max-w-full max-h-full rounded-3xl shadow-2xl border border-white/10"
+                />
+              ) : (
+                <motion.img
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  src={previewMedia}
+                  onClick={(e) => e.stopPropagation()}
+                  className="max-w-full max-h-full rounded-3xl shadow-2xl border border-white/10"
+                />
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* NEW: Smart Editor Modal Popup */}
-      <AnimatePresence>
-        {isEditorOpen && editingMedia && (
+      {createPortal(
+        <AnimatePresence>
+          {isEditorOpen && editingMedia && (
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
             >
-                {/* Close Button for Editor */}
-                <button
-                    onClick={() => setIsEditorOpen(false)}
-                    className="absolute top-4 right-4 z-[9999] p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-full transition-all border border-red-500/20"
-                >
-                    <X size={24} />
-                </button>
+              {/* Close Button for Editor */}
+              <button
+                onClick={() => setIsEditorOpen(false)}
+                className="absolute top-4 right-4 z-[9999] p-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-full transition-all border border-red-500/20"
+              >
+                <X size={24} />
+              </button>
 
-                {/* Editor Container - Needs to set the file into the SmartEditor */}
-                <div className="w-full h-full max-w-[90vw] max-h-[90vh] bg-[#09090b] rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative">
-                    
-                    {/* IMPORTANT: 
+              {/* Editor Container - Needs to set the file into the SmartEditor */}
+              <div className="w-full h-full max-w-[90vw] max-h-[90vh] bg-[#09090b] rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative">
+
+                {/* IMPORTANT: 
                        You need to modify your SmartEditor component slightly to accept a `initialFile` prop.
                        If SmartEditor doesn't support props yet, you need to use a Ref or Effect inside it to load this file.
                        For now, I am passing `initialFile` assuming you update SmartEditor to use:
                        useEffect(() => { if(initialFile) handleUpload({target: {files: [initialFile]}}) }, [])
                     */}
-                    <SmartEditorWithPropInjection initialFile={editingMedia.file} />
+                <SmartEditorWithPropInjection initialFile={editingMedia.file} />
 
-                </div>
+              </div>
             </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
     </div>
   );
 }
 
 const SmartEditorWithPropInjection = ({ initialFile }) => {
-    
-    return <SmartEditor initialFile={initialFile} />;
+
+  return <SmartEditor initialFile={initialFile} />;
 };

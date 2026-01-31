@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, Terminal, Zap, BarChart3, 
-  Code2, Cpu, Globe, Sparkles, Aperture, 
-  Layers, ScanLine, Hexagon, Component, 
+import {
+  LayoutDashboard, Terminal, Zap, BarChart3,
+  Code2, Cpu, Globe, Sparkles, Aperture,
+  Layers, ScanLine, Hexagon, Component,
   Share2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -23,11 +23,11 @@ const DashFront = () => {
 
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-hidden relative font-sans selection:bg-cyan-500 selection:text-white perspective-[2000px]">
-      
+
       {/* ====================
           BACKGROUND LAYERS 
          ==================== */}
-         
+
       {/* 1. Deep Space Stars */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {[...Array(50)].map((_, i) => (
@@ -57,7 +57,7 @@ const DashFront = () => {
 
       {/* 2. Moving Cyber Grid Floor (Forward Momentum Only) */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none overflow-hidden" style={{ perspective: '1000px' }}>
-        <motion.div 
+        <motion.div
           className="absolute -left-[50%] -right-[50%] -bottom-[100%] h-[200%] origin-top"
           style={{
             backgroundImage: `
@@ -80,7 +80,7 @@ const DashFront = () => {
       </div>
 
       {/* 3. The "Aurora" Glow (Interactive Spotlight) */}
-      <motion.div 
+      <motion.div
         className="absolute top-0 left-0 w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none z-0"
         animate={{
           x: mousePosition.x - 400,
@@ -88,7 +88,7 @@ const DashFront = () => {
         }}
         transition={{ type: "spring", damping: 50, stiffness: 30 }}
       />
-      <motion.div 
+      <motion.div
         className="absolute bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] bg-cyan-600/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none"
         animate={{
           scale: [1.2, 1, 1.2],
@@ -100,10 +100,10 @@ const DashFront = () => {
       {/* ====================
              MAIN CONTENT 
          ==================== */}
-      
+
       {/* Main Container - No longer rotates the whole screen */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        
+
         {/* NAVBAR */}
         <nav className="relative z-50 flex justify-between items-center px-6 py-6 max-w-[1400px] w-full mx-auto">
           <div className="flex items-center gap-4">
@@ -118,7 +118,7 @@ const DashFront = () => {
               <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Generative Engine</span>
             </div>
           </div>
-          
+
           <div className="hidden md:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full p-1 backdrop-blur-md">
             {['Features', 'Gallery', 'Pricing', 'Docs'].map((item) => (
               <a key={item} href="#" className="px-5 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300">
@@ -136,14 +136,14 @@ const DashFront = () => {
 
         {/* HERO SECTION */}
         <main className="flex-grow flex flex-col justify-center items-center relative max-w-[1600px] mx-auto w-full px-6 pt-10 pb-20">
-          
+
           <div className="grid lg:grid-cols-12 gap-12 w-full items-center">
-            
+
             {/* LEFT COLUMN: TEXT */}
             <div className="lg:col-span-7 space-y-10 text-left relative z-20">
-              
+
               {/* Floating Badge */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="inline-flex items-center gap-3 px-4 py-2 rounded-lg bg-[#0f172a]/80 border border-indigo-500/30 text-indigo-300 text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(79,70,229,0.15)] backdrop-blur-xl"
@@ -159,7 +159,7 @@ const DashFront = () => {
 
               {/* MAIN GLITCH TITLE */}
               <div className="relative">
-                <motion.h1 
+                <motion.h1
                   className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.9] text-white mix-blend-normal"
                 >
                   IMAGINE <br />
@@ -167,11 +167,11 @@ const DashFront = () => {
                     BOLDLY.
                   </span>
                 </motion.h1>
-                
+
                 {/* Glitch Overlay Effect */}
-                <motion.h1 
+                <motion.h1
                   className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.9] text-cyan-500 absolute top-0 left-0 opacity-0 pointer-events-none"
-                  animate={{ 
+                  animate={{
                     opacity: [0, 0.5, 0, 0.3, 0],
                     x: [0, -2, 0, 2, 0],
                     clipPath: ['inset(10% 0 0 0)', 'inset(80% 0 0 0)', 'inset(20% 0 0 0)']
@@ -182,7 +182,7 @@ const DashFront = () => {
                 </motion.h1>
               </div>
 
-              <motion.h2 
+              <motion.h2
                 className="text-4xl md:text-6xl font-light tracking-tight text-slate-300"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -197,22 +197,22 @@ const DashFront = () => {
 
               {/* ACTION BUTTONS */}
               <div className="flex flex-wrap gap-5">
-                <button 
+                <button
                   onClick={() => navigate('/Tool')}
                   className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]"
                 >
                   <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                <Link 
-  to="/Tool"  // <--- This is the format
-  className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] inline-flex" // Added inline-flex to keep alignment
->
-  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-  <span className="relative flex items-center gap-3">
-    Start Creating <Sparkles size={18} className="text-indigo-600" />
-  </span>
-</Link>
+                  <Link
+                    to="/Tool"  // <--- This is the format
+                    className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] inline-flex" // Added inline-flex to keep alignment
+                  >
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+                    <span className="relative flex items-center gap-3">
+                      Start Creating <Sparkles size={18} className="text-indigo-600" />
+                    </span>
+                  </Link>
                 </button>
-                
+
                 <button className="group px-8 py-4 bg-transparent border border-white/20 text-white rounded-lg font-bold text-lg hover:bg-white/5 hover:border-white/40 transition-all flex items-center gap-3 backdrop-blur-sm">
                   <Globe size={18} />
                   Explore The Hub
@@ -223,25 +223,25 @@ const DashFront = () => {
 
             {/* RIGHT COLUMN: HOLOGRAPHIC INTERFACE (Still has depth, but no page tilt) */}
             <div className="lg:col-span-5 relative h-[600px] flex items-center justify-center perspective-[1000px] z-10">
-              
+
               {/* ORBITAL RINGS */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                 <motion.div 
-                   className="w-[500px] h-[500px] border border-slate-800 rounded-full"
-                   style={{ rotateX: '60deg' }}
-                   animate={{ rotateZ: 360 }}
-                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                 />
-                 <motion.div 
-                   className="absolute w-[400px] h-[400px] border border-dashed border-indigo-500/20 rounded-full"
-                   style={{ rotateX: '60deg' }}
-                   animate={{ rotateZ: -360 }}
-                   transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                 />
+                <motion.div
+                  className="w-[500px] h-[500px] border border-slate-800 rounded-full"
+                  style={{ rotateX: '60deg' }}
+                  animate={{ rotateZ: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                />
+                <motion.div
+                  className="absolute w-[400px] h-[400px] border border-dashed border-indigo-500/20 rounded-full"
+                  style={{ rotateX: '60deg' }}
+                  animate={{ rotateZ: -360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                />
               </div>
 
               {/* FLOATING CARD 1: MAIN PREVIEW */}
-              <motion.div 
+              <motion.div
                 className="relative w-80 md:w-96 aspect-[4/5] bg-gradient-to-b from-slate-900/90 to-black/90 rounded-2xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden group z-20"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -265,36 +265,36 @@ const DashFront = () => {
                 <div className="relative h-full w-full">
                   {/* The Image Generation Animation */}
                   <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   {/* Scanning Overlay */}
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent h-[20%]"
                     animate={{ top: ['-20%', '120%'] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                   />
-                  
+
                   {/* Grid Overlay on Image */}
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30" />
                 </div>
 
                 {/* Floating Stats Pill */}
                 <div className="absolute bottom-6 left-6 right-6 p-4 bg-black/60 backdrop-blur-md border border-white/10 rounded-xl flex justify-between items-center">
-                   <div className="text-xs">
-                      <div className="text-slate-400">Rendering Time</div>
-                      <div className="text-white font-mono">0.04s</div>
-                   </div>
-                   <motion.div 
-                     animate={{ rotate: 360 }}
-                     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                   >
-                     <Aperture className="text-cyan-400" size={20} />
-                   </motion.div>
+                  <div className="text-xs">
+                    <div className="text-slate-400">Rendering Time</div>
+                    <div className="text-white font-mono">0.04s</div>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Aperture className="text-cyan-400" size={20} />
+                  </motion.div>
                 </div>
               </motion.div>
 
 
               {/* FLOATING CARD 2: PROMPT CONSOLE (Drifting animation only, no page tilt) */}
-              <motion.div 
+              <motion.div
                 className="absolute -right-8 md:-right-12 top-20 w-64 bg-[#0a0f1e]/90 border border-indigo-500/30 rounded-xl p-4 shadow-2xl backdrop-blur-xl z-30"
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -304,34 +304,34 @@ const DashFront = () => {
                   INPUT_PROMPT
                 </div>
                 <p className="text-sm font-mono text-slate-300 leading-relaxed">
-                  <span className="text-pink-500"></span> cyberpunk city, 
-                  <span className="text-cyan-400"> neon lights</span>, 
-                  rain reflection, 
+                  <span className="text-pink-500"></span> cyberpunk city,
+                  <span className="text-cyan-400"> neon lights</span>,
+                  rain reflection,
                   <span className="text-yellow-400"> volumetric fog</span>...
-                  <span className="animate-pulse inline-block w-2 h-4 bg-indigo-500 align-middle ml-1"/>
+                  <span className="animate-pulse inline-block w-2 h-4 bg-indigo-500 align-middle ml-1" />
                 </p>
               </motion.div>
 
 
               {/* FLOATING CARD 3: ASSET LIBRARY */}
-              <motion.div 
+              <motion.div
                 className="absolute -left-8 md:-left-12 bottom-32 w-56 bg-[#0a0f1e]/90 border border-cyan-500/30 rounded-xl p-3 shadow-2xl backdrop-blur-xl z-10"
                 animate={{ y: [0, 15, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               >
-                 <div className="flex justify-between items-center mb-3">
-                   <span className="text-xs font-bold text-cyan-300">ASSETS_LOADED</span>
-                   <Layers size={12} className="text-cyan-500" />
-                 </div>
-                 <div className="grid grid-cols-4 gap-2">
-                   {[...Array(8)].map((_, i) => (
-                     <div key={i} className="aspect-square rounded bg-slate-800/50 border border-white/5 hover:bg-cyan-500/20 transition-colors" />
-                   ))}
-                 </div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-xs font-bold text-cyan-300">ASSETS_LOADED</span>
+                  <Layers size={12} className="text-cyan-500" />
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {[...Array(8)].map((_, i) => (
+                    <div key={i} className="aspect-square rounded bg-slate-800/50 border border-white/5 hover:bg-cyan-500/20 transition-colors" />
+                  ))}
+                </div>
               </motion.div>
 
               {/* Decorative Floating Hexagon */}
-              <motion.div 
+              <motion.div
                 className="absolute -top-10 left-0 text-slate-700/50"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -346,16 +346,16 @@ const DashFront = () => {
         {/* FOOTER STRIP */}
         <footer className="relative z-10 border-t border-white/5 bg-black/20 backdrop-blur-md">
           <div className="max-w-[1400px] mx-auto px-6 py-8 flex flex-wrap justify-center md:justify-between items-center gap-6">
-            
+
             <div className="flex gap-8">
-               <Feature icon={<Zap size={16} />} text="Instant Renders" />
-               <Feature icon={<Component size={16} />} text="API Ready" />
-               <Feature icon={<Share2 size={16} />} text="Collab Mode" />
+              <Feature icon={<Zap size={16} />} text="Instant Renders" />
+              <Feature icon={<Component size={16} />} text="API Ready" />
+              <Feature icon={<Share2 size={16} />} text="Collab Mode" />
             </div>
 
             <div className="flex items-center gap-2 text-slate-500 text-sm font-mono">
-               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-               SERVER_STATUS: ONLINE
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              SERVER_STATUS: ONLINE
             </div>
 
           </div>

@@ -1,21 +1,21 @@
 import { useStudio } from '../Context/StudioContext';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Trash2, Plus, UserCircle2, Pencil, AlertTriangle, Fingerprint, 
+import {
+  Trash2, Plus, UserCircle2, Pencil, AlertTriangle, Fingerprint,
   Clock, Activity, Wrench, Loader2, ImageOff, X,
   // Icons for the Dock
   MessageCircle, Inbox, ToggleLeft, Eye, Upload, Menu, MoreHorizontal, Info, BrainCircuit, ScanFace
-} from 'lucide-react'; 
+} from 'lucide-react';
 import { toast } from 'react-toastify';
-import { cn } from '../lib/utils'; 
+import { cn } from '../lib/utils';
 
 import UserDetails from './UserDetails';
-import HistoryModal from './HistoryModal'; 
+import HistoryModal from './HistoryModal';
 import "./CastLocker.css";
 
 
-const API_BASE_URL =import.meta.env.VITE_API_BASE_URL; 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function RollingText({
   text = "ROLLING TEXT",
@@ -59,7 +59,7 @@ function RollingText({
 
 // --- SUB-COMPONENT: Robust Image Loader ---
 const CharacterImage = ({ src, alt }) => {
-  const [status, setStatus] = useState("loading"); 
+  const [status, setStatus] = useState("loading");
 
   return (
     <div className="relative w-full h-full bg-[#1C1C1E]">
@@ -73,8 +73,8 @@ const CharacterImage = ({ src, alt }) => {
           <ImageOff size={24} className="mb-1 opacity-50" />
         </div>
       )}
-      <img 
-        src={src} 
+      <img
+        src={src}
         alt={alt}
         className={cn(
           "w-full h-full object-cover transition-opacity duration-500",
@@ -97,10 +97,10 @@ export default function CastLocker() {
   const [characterToDelete, setCharacterToDelete] = useState(null);
   const [infoChar, setInfoChar] = useState(null); // State for Individual Info Modal
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const [showHistory, setShowHistory] = useState(false);
   const [historyCharId, setHistoryCharId] = useState(null);
-  const fileInputRef = useRef(null); 
+  const fileInputRef = useRef(null);
 
   // State for Memory Health
   const [memoryStatus, setMemoryStatus] = useState({});
@@ -115,7 +115,7 @@ export default function CastLocker() {
         headers: { 'Content-Type': 'application/json' }
       });
       if (!response.ok) throw new Error("Failed to load");
-      
+
       const data = await response.json();
       setUserData(data);
     } catch (error) {
@@ -131,7 +131,7 @@ export default function CastLocker() {
   }, [fetchCharacters]);
 
   const checkMemoryHealth = async (id) => {
-    if (memoryStatus[id]) return; 
+    if (memoryStatus[id]) return;
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/characters/${id}/memory-status`);
       const data = await response.json();
@@ -207,7 +207,7 @@ export default function CastLocker() {
     setHistoryCharId(id);
     setShowHistory(true);
   };
-  
+
   const openInfo = (e, char) => {
     e.stopPropagation();
     // Ensure we have the latest health status when opening info
@@ -222,14 +222,14 @@ export default function CastLocker() {
 
   return (
     <aside className="relative w-72 bg-[#111111] border-r border-zinc-900 flex flex-col h-full overflow-hidden font-sans text-zinc-100">
-      
+
       {/* --- HISTORY MODAL --- */}
       <AnimatePresence>
         {showHistory && (
-          <HistoryModal 
-            open={showHistory} 
-            onClose={() => setShowHistory(false)} 
-            characterId={historyCharId} 
+          <HistoryModal
+            open={showHistory}
+            onClose={() => setShowHistory(false)}
+            characterId={historyCharId}
           />
         )}
       </AnimatePresence>
@@ -246,7 +246,7 @@ export default function CastLocker() {
       <AnimatePresence>
         {(file || editingChar) && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -261,7 +261,7 @@ export default function CastLocker() {
                   onCancel={closeModal}
                 />
               </div>
-             
+
             </motion.div>
           </div>
         )}
@@ -271,7 +271,7 @@ export default function CastLocker() {
       <AnimatePresence>
         {characterToDelete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -279,10 +279,10 @@ export default function CastLocker() {
               className="relative w-full max-w-[400px] bg-[#111111] rounded-[32px] overflow-hidden border border-zinc-900 shadow-2xl p-6"
             >
               <div className="flex items-center justify-between mb-6">
-                 <h1 className="text-xl font-semibold text-white">Delete Identity?</h1>
-                 <button onClick={cancelDelete} className="p-2 text-zinc-500 hover:text-white bg-[#1C1C1E] rounded-full transition-colors">
-                   <X size={18} />
-                 </button>
+                <h1 className="text-xl font-semibold text-white">Delete Identity?</h1>
+                <button onClick={cancelDelete} className="p-2 text-zinc-500 hover:text-white bg-[#1C1C1E] rounded-full transition-colors">
+                  <X size={18} />
+                </button>
               </div>
               <div className="flex flex-col items-center mb-6">
                 <div className="w-16 h-16 bg-[#1C1C1E] rounded-full flex items-center justify-center mb-4 text-red-500">
@@ -309,7 +309,7 @@ export default function CastLocker() {
       <AnimatePresence>
         {infoChar && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -318,52 +318,52 @@ export default function CastLocker() {
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                 <div>
-                    <h1 className="text-lg font-bold text-white uppercase tracking-tight">{infoChar.name}</h1>
-                    <p className="text-[10px] text-zinc-500 font-mono">ID: {infoChar.id}</p>
-                 </div>
-                 <button onClick={() => setInfoChar(null)} className="p-2 text-zinc-500 hover:text-white bg-[#1C1C1E] rounded-full transition-colors">
-                   <X size={18} />
-                 </button>
+                <div>
+                  <h1 className="text-lg font-bold text-white uppercase tracking-tight">{infoChar.name}</h1>
+                  <p className="text-[10px] text-zinc-500 font-mono">ID: {infoChar.id}</p>
+                </div>
+                <button onClick={() => setInfoChar(null)} className="p-2 text-zinc-500 hover:text-white bg-[#1C1C1E] rounded-full transition-colors">
+                  <X size={18} />
+                </button>
               </div>
 
               {/* Health Status Block */}
               <div className="p-4 bg-[#1C1C1E] rounded-2xl border border-zinc-800 mb-4 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-4 opacity-10">
-                     <BrainCircuit size={64} />
-                  </div>
-                  <span className="text-xs text-zinc-500 uppercase tracking-widest block mb-2">Neural Health</span>
-                  <div className="flex items-baseline gap-2">
-                     <span className={cn("text-4xl font-black", memoryStatus[infoChar.id]?.health_score > 80 ? 'text-green-500' : 'text-amber-500')}>
-                        {memoryStatus[infoChar.id]?.health_score || 0}%
-                     </span>
-                     <span className="text-xs font-bold text-zinc-400">
-                        {memoryStatus[infoChar.id]?.health_status || "ANALYZING"}
-                     </span>
-                  </div>
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                  <BrainCircuit size={64} />
+                </div>
+                <span className="text-xs text-zinc-500 uppercase tracking-widest block mb-2">Neural Health</span>
+                <div className="flex items-baseline gap-2">
+                  <span className={cn("text-4xl font-black", memoryStatus[infoChar.id]?.health_score > 80 ? 'text-green-500' : 'text-amber-500')}>
+                    {memoryStatus[infoChar.id]?.health_score || 0}%
+                  </span>
+                  <span className="text-xs font-bold text-zinc-400">
+                    {memoryStatus[infoChar.id]?.health_status || "ANALYZING"}
+                  </span>
+                </div>
               </div>
 
               {/* Metadata Grid */}
               <div className="space-y-3">
-                 <div className="flex items-center gap-2 mb-2">
-                    <ScanFace size={14} className="text-blue-500" />
-                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Identity Metadata</span>
-                 </div>
-                 
-                 <div className="bg-[#1C1C1E] rounded-2xl p-4 border border-zinc-800 space-y-3">
-                    <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                       <span className="text-xs text-zinc-500">Face Structure</span>
-                       <span className="text-xs font-medium text-white">{infoChar.char_metadata?.face || "N/A"}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
-                       <span className="text-xs text-zinc-500">Hair Style</span>
-                       <span className="text-xs font-medium text-white">{infoChar.char_metadata?.hair || "N/A"}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                       <span className="text-xs text-zinc-500">Eye Color</span>
-                       <span className="text-xs font-medium text-white">{infoChar.char_metadata?.eyes || "N/A"}</span>
-                    </div>
-                 </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <ScanFace size={14} className="text-blue-500" />
+                  <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Identity Metadata</span>
+                </div>
+
+                <div className="bg-[#1C1C1E] rounded-2xl p-4 border border-zinc-800 space-y-3">
+                  <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                    <span className="text-xs text-zinc-500">Face Structure</span>
+                    <span className="text-xs font-medium text-white">{infoChar.char_metadata?.face || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-zinc-800/50 pb-2">
+                    <span className="text-xs text-zinc-500">Hair Style</span>
+                    <span className="text-xs font-medium text-white">{infoChar.char_metadata?.hair || "N/A"}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-zinc-500">Eye Color</span>
+                    <span className="text-xs font-medium text-white">{infoChar.char_metadata?.eyes || "N/A"}</span>
+                  </div>
+                </div>
               </div>
 
             </motion.div>
@@ -373,41 +373,41 @@ export default function CastLocker() {
 
       {/* --- MAIN LIST --- */}
       <div className="flex-1 overflow-y-auto p-4 pb-24 space-y-4 custom-scrollbar">
-        
+
         {/* Upload Area */}
         <label className="group relative flex flex-col items-center justify-center h-32 border-2 border-dashed border-zinc-800 bg-[#1C1C1E]/30 rounded-2xl hover:border-blue-500/50 hover:bg-blue-500/5 cursor-pointer transition-all">
           <div className="p-3 rounded-full bg-[#1C1C1E] group-hover:bg-[#27272A] transition-colors mb-2">
-             <Plus className="text-zinc-500 group-hover:text-blue-500 transition-colors" size={20} />
+            <Plus className="text-zinc-500 group-hover:text-blue-500 transition-colors" size={20} />
           </div>
           <span className="text-xs font-medium text-zinc-500 group-hover:text-blue-400 transition-colors">Add New Identity</span>
-          <input 
-            ref={fileInputRef} 
-            type="file" 
-            className="hidden" 
-            accept="image/*" 
-            onChange={handleUpload} 
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            accept="image/*"
+            onChange={handleUpload}
           />
         </label>
 
         {/* Loading State */}
         {isLoading ? (
-           <div className="space-y-4">
-             {[1,2,3].map(i => (
-               <div key={i} className="h-24 rounded-2xl bg-[#1C1C1E] animate-pulse border border-zinc-900" />
-             ))}
-           </div>
+          <div className="space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-24 rounded-2xl bg-[#1C1C1E] animate-pulse border border-zinc-900" />
+            ))}
+          </div>
         ) : userData && userData.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-zinc-600">
-             <UserCircle2 size={32} className="opacity-20 mb-2" />
-             <span className="text-xs uppercase tracking-widest">No Cast Members</span>
+            <UserCircle2 size={32} className="opacity-20 mb-2" />
+            <span className="text-xs uppercase tracking-widest">No Cast Members</span>
           </div>
         ) : (
           userData && userData.map((char) => {
             const isSelected = selectedCharacterId === char.id;
             const meta = char.char_metadata;
             const health = memoryStatus[char.id];
-            
-            const imageUrl = char?.base_image_url 
+
+            const imageUrl = char?.base_image_url
               ? (char.base_image_url.startsWith('http') ? char.base_image_url : `${API_BASE_URL}${char.base_image_url}`)
               : null;
 
@@ -416,75 +416,89 @@ export default function CastLocker() {
                 layoutId={char.id}
                 key={char.id}
                 onClick={() => selectCharacter(char.id)}
-                onMouseEnter={() => checkMemoryHealth(char.id)} 
+                onMouseEnter={() => checkMemoryHealth(char.id)}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 25,
+                  mass: 0.8
+                }}
+                whileHover={{
+                  scale: 1.02,
+                  y: -4,
+                  transition: { duration: 0.2 }
+                }}
                 className={cn(
                   "group relative rounded-2xl border overflow-hidden transition-all cursor-pointer",
-                  isSelected 
-                    ? "border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)] bg-[#111111]" 
-                    : "border-zinc-900 bg-[#1C1C1E] hover:border-zinc-700"
+                  isSelected
+                    ? "border-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.25)] bg-[#111111]"
+                    : "border-zinc-900 bg-[#1C1C1E] hover:border-zinc-700 hover:shadow-lg"
                 )}
               >
                 {/* ACTIONS DOCK (Floating Pill) */}
                 <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                   <div className="flex items-center gap-1 p-1.5 bg-[#111111]/90 backdrop-blur-md border border-zinc-800 rounded-full shadow-xl">
-                      
-                      {/* INDIVIDUAL INFO BUTTON (New) */}
-                      <div className="relative group/tooltip">
-                         <button 
-                           onClick={(e) => openInfo(e, char)} 
-                           className="p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-full transition-all"
-                         >
-                           <Info size={14} />
-                         </button>
-                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
-                           Info
-                         </span>
-                      </div>
 
-                      <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
+                    {/* INDIVIDUAL INFO BUTTON (New) */}
+                    <div className="relative group/tooltip">
+                      <button
+                        onClick={(e) => openInfo(e, char)}
+                        className="p-1.5 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-full transition-all"
+                      >
+                        <Info size={14} />
+                      </button>
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                        Info
+                      </span>
+                    </div>
 
-                      {/* History Button */}
-                      <div className="relative group/tooltip">
-                         <button 
-                           onClick={(e) => openHistory(e, char.id)} 
-                           className="p-1.5 text-zinc-400 hover:text-amber-400 hover:bg-zinc-800 rounded-full transition-all"
-                         >
-                           <Clock size={14} />
-                         </button>
-                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
-                           History
-                         </span>
-                      </div>
+                    <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
 
-                      <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
+                    {/* History Button */}
+                    <div className="relative group/tooltip">
+                      <button
+                        onClick={(e) => openHistory(e, char.id)}
+                        className="p-1.5 text-zinc-400 hover:text-amber-400 hover:bg-zinc-800 rounded-full transition-all"
+                      >
+                        <Clock size={14} />
+                      </button>
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                        History
+                      </span>
+                    </div>
 
-                      {/* Edit Button */}
-                      <div className="relative group/tooltip">
-                         <button 
-                           onClick={(e) => { e.stopPropagation(); setEditingChar(char); }} 
-                           className="p-1.5 text-zinc-400 hover:text-blue-400 hover:bg-zinc-800 rounded-full transition-all"
-                         >
-                           <Pencil size={14} />
-                         </button>
-                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
-                           Edit
-                         </span>
-                      </div>
+                    <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
 
-                      <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
+                    {/* Edit Button */}
+                    <div className="relative group/tooltip">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditingChar(char); }}
+                        className="p-1.5 text-zinc-400 hover:text-blue-400 hover:bg-zinc-800 rounded-full transition-all"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                        Edit
+                      </span>
+                    </div>
 
-                      {/* Delete Button */}
-                      <div className="relative group/tooltip">
-                         <button 
-                           onClick={(e) => { e.stopPropagation(); confirmDelete(char.id); }} 
-                           className="p-1.5 text-zinc-400 hover:text-red-500 hover:bg-zinc-800 rounded-full transition-all"
-                         >
-                           <Trash2 size={14} />
-                         </button>
-                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
-                           Delete
-                         </span>
-                      </div>
+                    <div className="w-px h-3 bg-zinc-800" /> {/* Divider */}
+
+                    {/* Delete Button */}
+                    <div className="relative group/tooltip">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); confirmDelete(char.id); }}
+                        className="p-1.5 text-zinc-400 hover:text-red-500 hover:bg-zinc-800 rounded-full transition-all"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                        Delete
+                      </span>
+                    </div>
 
                   </div>
                 </div>
@@ -524,8 +538,8 @@ export default function CastLocker() {
 
                 {/* Image Section */}
                 <div className="relative h-44 overflow-hidden">
-                   <CharacterImage src={imageUrl} alt={char.name} />
-                   <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-transparent to-transparent opacity-80" />
+                  <CharacterImage src={imageUrl} alt={char.name} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-transparent to-transparent opacity-80" />
                 </div>
 
                 {/* Card Footer */}
@@ -537,7 +551,7 @@ export default function CastLocker() {
                   <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#111111] border border-zinc-800">
                     <div className="h-1 w-1 rounded-full bg-blue-500 animate-pulse" />
                     <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">
-                       <RollingText text="READY" speed={0.05} />
+                      <RollingText text="READY" speed={0.05} />
                     </span>
                   </div>
                 </div>
@@ -548,41 +562,64 @@ export default function CastLocker() {
       </div>
 
       {/* --- GLOBAL FLOATING DOCK (Bottom) --- */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-7">
-        <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1C1C1E] border border-zinc-800 rounded-full shadow-2xl backdrop-blur-md">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+          className="flex items-center gap-1 px-2 py-1.5 bg-[#1C1C1E]/90 border border-zinc-800 rounded-full shadow-2xl backdrop-blur-xl"
+        >
           
-          <button className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative"
+          >
             <Inbox size={20} strokeWidth={1.5} />
             <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-blue-500 rounded-full border border-[#1C1C1E]" />
-          </button>
+          </motion.button>
           
-          <button className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
+          >
             <ToggleLeft size={20} strokeWidth={1.5} />
-          </button>
+          </motion.button>
           
-          <button className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
+          >
             <Eye size={20} strokeWidth={1.5} />
-          </button>
+          </motion.button>
 
           {/* Upload Button */}
           <div className="relative group">
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-black text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
               Add Identity
             </div>
-            <button 
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={triggerFileUpload}
               className="p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
             >
               <Upload size={20} strokeWidth={1.5} />
-            </button>
+            </motion.button>
           </div>
 
-          <button className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative">
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative"
+          >
             <Menu size={20} strokeWidth={1.5} />
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
-    
+
     </aside>
   );
 }

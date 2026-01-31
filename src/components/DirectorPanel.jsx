@@ -99,10 +99,10 @@ export default function DirectorPanel() {
   const handleSuggestion = (value) => {
     // If input is empty, just set value. If not, add space then value.
     const newValue = input.trim().length === 0 ? value : `${input} ${value}`;
-    
+
     setInput(newValue);
     setPrompt(newValue);
-    
+
     // Focus back on text area so user can keep typing
     textareaRef.current?.focus();
   };
@@ -138,31 +138,33 @@ export default function DirectorPanel() {
   };
 
   return (
-    <div className="p-4 sm:p-6 border-t bg-[#111111] border-zinc-900 relative " style={{zIndex:-9}} >
+    <div className="p-4 sm:p-6 border-t bg-[#111111] border-zinc-900 relative z-10" >
 
       <div className="max-w-5xl mx-auto flex flex-col gap-2">
 
         {/* 🎬 NEW: Camera Suggestions Bar */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar mask-gradient">
-            <div className="flex items-center gap-1 text-zinc-500 text-xs font-bold uppercase tracking-wider px-2 shrink-0">
-                <Video size={12} />
-                <span>Angles</span>
-            </div>
-            {CAMERA_OPTIONS.map((option) => (
-            <button
-  key={option.label}
-  onClick={() => handleSuggestion(option.value)}
-  title={option.desc}
-  className="
+          <div className="flex items-center gap-1 text-zinc-500 text-xs font-bold uppercase tracking-wider px-2 shrink-0">
+            <Video size={12} />
+            <span>Angles</span>
+          </div>
+          {CAMERA_OPTIONS.map((option) => (
+            <motion.button
+              key={option.label}
+              onClick={() => handleSuggestion(option.value)}
+              title={option.desc}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="
     shrink-0 relative px-3 py-1.5 text-xs text-zinc-400 font-medium transition-all overflow-hidden rounded-md group
-    bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:text-zinc-100
+    bg-zinc-900/50 border border-zinc-800/50 hover:border-blue-500/50 hover:text-zinc-100 hover:shadow-[0_0_15px_rgba(59,130,246,0.15)]
   "
->
-  <span className="relative z-10">{option.label}</span>
-  {/* The sliding color effect */}
-  <div className="absolute inset-0 bg-blue-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-</button>
-            ))}
+            >
+              <span className="relative z-10">{option.label}</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+            </motion.button>
+          ))}
         </div>
 
         {/* Input Container */}

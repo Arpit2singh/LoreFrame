@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Zap, Activity, Layers, MoreHorizontal, X, 
-  Cpu, HardDrive 
+import {
+  Zap, Activity, Layers, MoreHorizontal, X,
+  Cpu, HardDrive
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -38,10 +38,10 @@ const TechHUD = () => {
 
   return (
     <div className="relative" ref={containerRef}>
-      
+
       {/* 1. Trigger / Collapsed State (Always Visible Placeholders) */}
       {!isExpanded && (
-        <motion.div 
+        <motion.div
           layoutId="techHud"
           onClick={() => setIsExpanded(true)}
           className="h-10 rounded-full px-4 flex items-center justify-center bg-[#1C1C1E] border border-zinc-800 cursor-pointer hover:border-zinc-700 transition-colors"
@@ -71,7 +71,7 @@ const TechHUD = () => {
                   </div>
                   <span className="text-sm font-bold text-white tracking-tight">Resource Monitor</span>
                 </div>
-                <button 
+                <button
                   onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
                   className="p-1.5 rounded-full bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                 >
@@ -81,7 +81,7 @@ const TechHUD = () => {
 
               {/* Grid of Cards */}
               <div className="grid grid-cols-2 gap-2 p-1">
-                
+
                 {/* Card 1: Credits */}
                 <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl p-4 flex flex-col justify-between h-28 relative overflow-hidden group">
                   <div className="absolute top-2 right-2 opacity-50"><MoreHorizontal size={16} className="text-white" /></div>
@@ -144,35 +144,48 @@ export default function StudioDashboard() {
   return (
     // Outer Container: Forces full viewport height and prevents page scroll
     <div className="flex h-screen w-screen bg-transparent text-slate-200 font-sans overflow-hidden">
-      
+
       {/* Left Sidebar: Fixed width */}
       <CastLocker />
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col relative h-full min-w-0">
-        
+
         {/* --- HEADER --- */}
-        <header className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-10 flex items-center gap-4">
-          
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-10 flex items-center gap-4"
+        >
+
           {/* 1. Left: Brand */}
           <div className="flex items-baseline gap-2 shrink-0">
-            <h1 className="text-xl font-bold tracking-tighter text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-             LoraFrame
-            </h1>
+            <motion.h1
+              whileHover={{ scale: 1.05 }}
+              className="text-xl font-bold tracking-tighter text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] cursor-pointer"
+            >
+              LoraFrame
+            </motion.h1>
           </div>
 
           {/* 2. Middle: Doodle Animation (Full Width of available space) */}
           {/* Constrained height (h-14) ensures it fits in header without pushing layout */}
-          <div className="flex-1 h-14 relative overflow-hidden flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity">
-             <DoodleMan className="w-full h-full" />
-          </div>
-          
-          {/* 3. Right: Tech HUD */}
-          <div className="shrink-0">
-             <TechHUD />
+          <div className="flex-1 h-14 relative overflow-hidden flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity duration-500">
+            <DoodleMan className="w-full h-full" />
           </div>
 
-        </header>
+          {/* 3. Right: Tech HUD */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="shrink-0"
+          >
+            <TechHUD />
+          </motion.div>
+
+        </motion.header>
 
         {/* Scrollable Timeline Area */}
         <div className="flex-1 min-h-0 relative z-10">
@@ -183,7 +196,7 @@ export default function StudioDashboard() {
         <div className="shrink-0 w-full z-30 bg-gradient-to-t from-[#111111] via-[#111111]/90 to-transparent pt-4">
           <DirectorPanel />
         </div>
-        
+
       </main>
     </div>
   );
