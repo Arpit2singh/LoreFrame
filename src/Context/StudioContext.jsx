@@ -68,7 +68,7 @@ export const StudioProvider = ({ children }) => {
       addLog("Step 2: Dispatching Job...");
 
       if(Type){
-      const startRes = await fetch(`${API_BASE_URL}/api/v1/generate/image`, {
+      const startRes = await fetch(`${API_BASE_URL}/api/v1/generate`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
