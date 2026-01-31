@@ -145,85 +145,93 @@ export const StudioProvider = ({ children }) => {
       addLog("✨ Storyboard generated successfully!");
       return newScene;
 
-    } else{
+    } else {
+  // --- VIDEO GENERATION BRANCH ---
+  addLog("Step 2: Dispatching Image Generation for Video...");
 
-        const startRes = await fetch(`${API_BASE_URL}/api/v1/generate/video`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
-          body: JSON.stringify({
-            character_id: character.id,
-            prompt: prompt,
-            // Fallback to empty string if no image url, though API might require it
-            pose_image_url: character.base_image_url || "", 
-            options: {
-              video: true,
-              refine_face: true,
-              aspect_ratio: "16:9",
-              style_overrides: []
-            }
-          })
-        }
-      );
-
-      if (!startRes.ok) throw new Error("Failed to start generation job");
-      const { job_id } = await startRes.json();
-      addLog(`✅ Job started: ${job_id}`);
-
-      // ---------------------------------------------------------
-      // STEP 3: POLL FOR COMPLETION
-      // ---------------------------------------------------------
-      let jobResult = null;
-      let attempts = 0;
-      const maxAttempts = 60; // 3 minutes timeout
-
-      while (!jobResult && attempts < maxAttempts) {
-        await new Promise(res => setTimeout(res, 3000)); // Wait 3s
-        attempts++;
-
-        const jobRes = await fetch(`${API_BASE_URL}/api/v1/jobs/${job_id}`);
-        if(jobRes.ok) {
-           const data = await jobRes.json();
-           if (data.status === "success") {
-             jobResult = data;
-             break;
-           }
-           if (data.status === "failed") {
-             throw new Error(data.error_message || "Server reported job failure");
-           }
-           addLog(`...Rendering (${attempts * 3}s)`);
-        }
+  const startRes = await fetch(`${API_BASE_URL}/api/v1/generate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      character_id: character.id,
+      prompt: prompt,
+      pose_image_url: character.base_image_url || "",
+      options: {
+        video: false, 
+        refine_face: true,
+        aspect_ratio: "16:9",
+        style_overrides: []
       }
+    })
+  });
 
-      if (!jobResult) throw new Error("Generation timed out");
+  if (!startRes.ok) throw new Error("Failed to start initial generation");
+  const { job_id } = await startRes.json();
 
-      // ---------------------------------------------------------
-      // SUCCESS: UPDATE TIMELINE
-      // ---------------------------------------------------------
-      // Normalize URL: Ensure it starts with base URL if it's relative
-      let resultUrl = jobResult.result_url || jobResult.output?.url || "";
-      if (resultUrl && !resultUrl.startsWith("http")) {
-        resultUrl = `${API_BASE_URL}${resultUrl}`;
+  // --- POLLING: Wait for Image to be ready ---
+  let imageResult = null;
+  let attempts = 0;
+  const maxAttempts = 60; 
+
+  while (!imageResult && attempts < maxAttempts) {
+    await new Promise(res => setTimeout(res, 3000)); // 3 sec ka gap
+    attempts++;
+
+    const jobRes = await fetch(`${API_BASE_URL}/api/v1/jobs/${job_id}`);
+    if (jobRes.ok) {
+      const data = await jobRes.json();
+      if (data.status === "success") {
+        imageResult = data;
+        break; 
       }
-
-      const newScene = {
-        id: jobResult.id || job_id, // Fallback ID
-        job_id: job_id,
-        prompt: prompt,
-        image: resultUrl, // Used by DirectorPanel logic
-        result_url: resultUrl, // Used by Timeline logic (normalized)
-        identityUsed: character.name,
-        metrics: jobResult.metrics || { idr_score: 0.99 },
-        timestamp: new Date().toLocaleTimeString(),
-        createdAt: new Date().toISOString()
-      };
-
-      setTimeline(prev => [newScene, ...prev]);
-      addLog("✨ Storyboard generated successfully!");
-      return newScene;
+      if (data.status === "failed") {
+        throw new Error(data.error_message || "Image generation failed");
+      }
+      addLog(`...Generating Image (${attempts * 3}s)`);
     }
+  }
+
+  if (!imageResult) throw new Error("Image generation timed out");
+
+  // --- EXTRACT IMAGE URL ---
+  let fetchedImageUrl = imageResult.result_url || imageResult.output?.url || "";
+  if (fetchedImageUrl && !fetchedImageUrl.startsWith("http")) {
+    fetchedImageUrl = `${API_BASE_URL}${fetchedImageUrl}`;
+  }
+
+  // --- STEP 4: GENERATE VIDEO FROM FETCHED IMAGE ---
+  addLog("Step 4: Image ready. Converting to motion video...");
+  const videoRes = await fetch(`${API_BASE_URL}/api/v1/generate-video-from-image`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt: prompt,
+      image_url: fetchedImageUrl 
+    })
+  });
+
+  if (!videoRes.ok) throw new Error("Video conversion failed");
+  const videoData = await videoRes.json();
+
+  const finalVideoUrl = videoData.video_path.startsWith("http") 
+    ? videoData.video_path 
+    : `${API_BASE_URL}${videoData.video_path}`;
+
+  // Update Timeline with both Thumbnail (image) and Video (result_url)
+  const newScene = {
+    id: `vid-${Date.now()}`,
+    prompt: prompt,
+    image: fetchedImageUrl, 
+    result_url: finalVideoUrl,
+    identityUsed: character.name,
+    type: 'video',
+    timestamp: new Date().toLocaleTimeString()
+  };
+
+  setTimeline(prev => [newScene, ...prev]);
+  addLog("✨ Video generated successfully!");
+  return newScene;
+}
 
     } catch (err) {
       console.error(err);
