@@ -261,9 +261,7 @@ export default function CastLocker() {
                   onCancel={closeModal}
                 />
               </div>
-              <button onClick={closeModal} className="absolute top-6 right-6 p-2 rounded-full bg-[#1C1C1E] text-zinc-500 hover:text-white transition-colors">
-                <X size={18} />
-              </button>
+             
             </motion.div>
           </div>
         )}
@@ -550,7 +548,7 @@ export default function CastLocker() {
       </div>
 
       {/* --- GLOBAL FLOATING DOCK (Bottom) --- */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-7">
         <div className="flex items-center gap-1 px-2 py-1.5 bg-[#1C1C1E] border border-zinc-800 rounded-full shadow-2xl backdrop-blur-md">
           
           <button className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative">

@@ -7,7 +7,8 @@ import {
   Smartphone, Monitor, Square, LayoutTemplate
 } from 'lucide-react';
 
-export default function SmartEditor() {
+// Accepted props: initialFile (passed from Timeline)
+export default function SmartEditor({ initialFile }) {
   // --- STATE MANAGEMENT ---
   const [loaded, setLoaded] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -65,6 +66,23 @@ export default function SmartEditor() {
   };
 
   useEffect(() => { loadFFmpeg(); }, []);
+
+  // --- NEW: AUTO-LOAD INITIAL FILE FROM PROPS ---
+  useEffect(() => {
+    if (initialFile) {
+      const url = URL.createObjectURL(initialFile);
+      setFile(initialFile);
+      setMediaSrc(url);
+
+      if (initialFile.type.startsWith('image/')) {
+        setMediaType('image');
+        setDuration(0); 
+      } else {
+        setMediaType('video');
+        // Note: Duration is set via onLoadedMetadata in the video tag
+      }
+    }
+  }, [initialFile]);
 
   // --- HANDLERS ---
   const handleUpload = (e) => {

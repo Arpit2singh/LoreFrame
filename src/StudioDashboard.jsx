@@ -152,16 +152,13 @@ export default function StudioDashboard() {
       <main className="flex-1 flex flex-col relative h-full min-w-0">
         
         {/* --- HEADER --- */}
-        <header className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-20 flex items-center gap-4">
+        <header className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-10 flex items-center gap-4">
           
           {/* 1. Left: Brand */}
           <div className="flex items-baseline gap-2 shrink-0">
             <h1 className="text-xl font-bold tracking-tighter text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-              CINESKETCH
+             LoraFrame
             </h1>
-            <span className="text-zinc-600 text-xs font-mono font-normal border border-zinc-800 px-1.5 rounded">
-              v1.0 BETA
-            </span>
           </div>
 
           {/* 2. Middle: Doodle Animation (Full Width of available space) */}

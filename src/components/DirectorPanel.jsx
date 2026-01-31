@@ -1,12 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { useStudio } from '../Context/StudioContext';
-import { Sparkles, Send, History, Eraser, Keyboard, Zap, AlertCircle } from 'lucide-react';
+import { Sparkles, Send, History, Eraser, Keyboard, Zap, AlertCircle, Video } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import { cn } from '../lib/utils';
 import HistoryModal from "./HistoryModal";
 import "./DirectorPanel.css";
 
+// 1. Define the Camera Options Data
+const CAMERA_OPTIONS = [
+  { label: "Eye-Level", value: " Camera sits at the subject’s eye height Feels neutral, honest, conversational.Used a lot in dramas and dialogue scenes ", desc: "Neutral, conversational, honest." },
+  { label: "High Angle", value: "Camera looks down on the subject. Makes the character seem smaller, weaker, vulnerable .Great for showing fear or loss of control.", desc: "Makes subject look smaller, weaker, vulnerable." },
+  { label: "Low Angle", value: "Camera looks up at the subject. Adds power, dominance, authority. Perfect for heroes, villains, or moments of confidence.", desc: "Adds power, dominance, authority." },
+  { label: "Bird's-Eye", value: "Bird's-Eye View", desc: "God-like, detached, shows chaos/patterns." },
+  { label: "Worm's-Eye", value: " Camera directly above the subject. Creates a god-like, detached feeling. Often used to show chaos, patterns, or isolation. ", desc: "Exaggerates height, makes things towering." },
+  { label: "Dutch Angle", value: "Camera very low, almost on the ground. Exaggerates height and strength. Makes buildings or characters feel towering and intense.", desc: "Tilted shot. Signals confusion or tension." },
+  { label: "Over-Shoulder", value: "Shot taken from behind one character, framing another. Pulls us into conversations and confrontations.", desc: "Conversation perspective." },
+  { label: "POV", value: "Camera becomes a character’s eyes. Creates immersion and emotional connection. ", desc: "Camera becomes character's eyes." },
+  { label: "Oblique", value: "Camera placed diagonally but not fully tilted. Adds subtle unease without being obvious.", desc: "Subtle unease without being fully tilted." },
+];
 
 function RollingText({
   text = "ROLLING TEXT",
@@ -26,9 +38,9 @@ function RollingText({
 
         return (
           <motion.span
-            key={`${text}-${i}`} // Unique key ensures animation resets if text changes
+            key={`${text}-${i}`}
             initial={{ y: "100%", opacity: 0, rotateX: 90 }}
-            animate={{ y: 0, opacity: 1, rotateX: 0 }} // Changed from whileInView to animate
+            animate={{ y: 0, opacity: 1, rotateX: 0 }}
             transition={{
               duration: duration,
               delay: delay,
@@ -51,12 +63,12 @@ export default function DirectorPanel() {
   const {
     generateStoryboard,
     isGenerating,
-    setPrompt, 
-    prompt: globalPrompt, 
+    setPrompt,
+    prompt: globalPrompt,
     userData,
     selectedCharacterId,
-    Type ,
-    setType ,
+    Type,
+    setType,
   } = useStudio();
 
   // Local state synced with global prompt
@@ -80,6 +92,18 @@ export default function DirectorPanel() {
   const handleClear = () => {
     setInput("");
     setPrompt(""); // Clear global as well
+    textareaRef.current?.focus();
+  };
+
+  // 🎬 NEW: Handle Camera Suggestion Click
+  const handleSuggestion = (value) => {
+    // If input is empty, just set value. If not, add space then value.
+    const newValue = input.trim().length === 0 ? value : `${input} ${value}`;
+    
+    setInput(newValue);
+    setPrompt(newValue);
+    
+    // Focus back on text area so user can keep typing
     textareaRef.current?.focus();
   };
 
@@ -114,45 +138,66 @@ export default function DirectorPanel() {
   };
 
   return (
-    <div className="p-4 sm:p-6 border-t bg-[#111111] border-zinc-900 relative z-30">
-      
+    <div className="p-4 sm:p-6 border-t bg-[#111111] border-zinc-900 relative " style={{zIndex:-9}} >
+
       <div className="max-w-5xl mx-auto flex flex-col gap-2">
-        
+
+        {/* 🎬 NEW: Camera Suggestions Bar */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar mask-gradient">
+            <div className="flex items-center gap-1 text-zinc-500 text-xs font-bold uppercase tracking-wider px-2 shrink-0">
+                <Video size={12} />
+                <span>Angles</span>
+            </div>
+            {CAMERA_OPTIONS.map((option) => (
+            <button
+  key={option.label}
+  onClick={() => handleSuggestion(option.value)}
+  title={option.desc}
+  className="
+    shrink-0 relative px-3 py-1.5 text-xs text-zinc-400 font-medium transition-all overflow-hidden rounded-md group
+    bg-zinc-900/50 border border-zinc-800/50 hover:border-zinc-700 hover:text-zinc-100
+  "
+>
+  <span className="relative z-10">{option.label}</span>
+  {/* The sliding color effect */}
+  <div className="absolute inset-0 bg-blue-600/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+</button>
+            ))}
+        </div>
+
         {/* Input Container */}
-        <div className="relative group flex gap-3 items-stretch bg-[#1C1C1E] border border-zinc-800 rounded-2xl p-2 backdrop-blur-xl shadow-2xl hover:border-zinc-700 transition-colors">
-          
-          {/* Icon Decorator */}
-          <div className="absolute left-30 top-10 flex gap-5 text-blue-500 pointer-events-none">
-            <Sparkles size={18} className={isGenerating ? "animate-pulse" : ""} />
-            
-          </div>
-           <select className='bg-blue-400 outline-none cursor-pointer rounded-xl pl-4 pr-3' value={Type} onChange={(e) => setType(e.target.value === "true")}>
-              <option value="true" className='bg-blue-400 outline-none cursor-pointer rounded-3xl p-2 ' >Image</option>
-               <option value="false" className='bg-blue-400 outline-none cursor-pointer rounded-3xl p-2 '>Video</option>
-            </select>
-         
-          
+
+        <div className="relative group flex gap-3 items-stretch bg-[#1C1C1E] border border-zinc-800 rounded-2xl p-2 backdrop-blur-xl shadow-2xl hover:border-zinc-700 transition-colors z-0">
+
+          {/* Dropdown/Select (Iska z-index high rakha hai taaki ye hamesha upar rahe) */}
+          <select
+            className='bg-blue-400 outline-none cursor-pointer rounded-xl pl-4 pr-3 relative z-20 text-black font-medium'
+            value={Type}
+            onChange={(e) => setType(e.target.value === "true")}
+          >
+            <option value="true">Image</option>
+            <option value="false">Video</option>
+          </select>
+
           <textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => {
               setInput(e.target.value);
-              setPrompt(e.target.value); 
+              setPrompt(e.target.value);
             }}
             onKeyDown={handleKeyDown}
             disabled={isGenerating}
-            placeholder={selectedCharacterId 
-              ? "Script your scene... (e.g. standing in a rainy cyberpunk alleyway looking up)" 
+            placeholder={selectedCharacterId
+              ? "Script your scene..."
               : "⚠️ Select a character to start scripting..."}
-            className="flex-1 bg-transparent pl-10 pr-12 py-3 resize-none outline-none text-zinc-200 placeholder:text-zinc-600 text-sm h-16 custom-scrollbar transition-all focus:h-24"
+            className="flex-1 bg-transparent px-4 py-3 resize-none outline-none text-zinc-200 placeholder:text-zinc-600 text-sm h-16 custom-scrollbar transition-all focus:h-24 relative z-0"
           />
 
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-2 pr-2">
-            
-            {/* Clear Button */}
+          {/* Right Side Actions: Buttons ko z-20 diya hai taaki click hamesha work kare */}
+          <div className="flex items-center gap-2 pr-2 relative z-20">
             {input && !isGenerating && (
-              <button 
+              <button
                 onClick={handleClear}
                 className="p-2 text-zinc-500 hover:text-red-400 transition-colors"
                 title="Clear Script"
@@ -161,61 +206,46 @@ export default function DirectorPanel() {
               </button>
             )}
 
-            {/* History Toggle */}
             <button
               onClick={() => setShowHistory(true)}
               className="p-3 rounded-xl bg-[#111111] text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all border border-zinc-800"
-              title="View History"
             >
               <History size={18} />
             </button>
 
-            {/* Generate Button with Animation */}
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !input.trim() || !selectedCharacterId}
-              className="h-full px-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-blue-500/20 active:scale-95 flex items-center gap-2 overflow-hidden"
+              className="h-full px-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg active:scale-95 flex items-center gap-2"
             >
-              {isGenerating ? (
-                <>
-                  <Zap size={16} className="animate-bounce" />
-                  <span className="hidden sm:inline">
-                    <RollingText text="PROCESSING..." speed={0.05} />
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Send size={16} />
-                  {/* Changed color from text-amber-500 to text-white/inherit to ensure visibility */}
-                  <span className="hidden sm:inline">
-                    <RollingText text="GENERATE" speed={0.1} />
-                  </span>
-                </>
-              )}
+              {isGenerating ? <Zap size={16} className="animate-bounce" /> : <Send size={16} />}
+              <span className="hidden sm:inline">
+                <RollingText text={isGenerating ? "PROCESSING..." : "GENERATE"} speed={0.1} />
+              </span>
             </button>
           </div>
         </div>
 
         {/* Footer Info */}
         <div className="flex justify-between items-center px-4 text-[10px] text-zinc-500 font-mono uppercase tracking-wider">
-           <div className="flex items-center gap-2">
-             <Keyboard size={12} />
-             <span>Ctrl + Enter to Submit</span>
-           </div>
-           
-           {/* Validation Warning - Animated */}
-           {!selectedCharacterId && (
-             <div className="flex items-center gap-1 text-amber-500">
-               <AlertCircle size={12} className="animate-pulse" />
-               <RollingText 
-                 text="SELECT CHARACTER FIRST" 
-                 speed={0.03} 
-                 className="text-amber-500 font-bold"
-               />
-             </div>
-           )}
+          <div className="flex items-center gap-2">
+            <Keyboard size={12} />
+            <span>Ctrl + Enter to Submit</span>
+          </div>
 
-           <div>{input.length} Chars</div>
+          {/* Validation Warning - Animated */}
+          {!selectedCharacterId && (
+            <div className="flex items-center gap-1 text-amber-500">
+              <AlertCircle size={12} className="animate-pulse" />
+              <RollingText
+                text="SELECT CHARACTER FIRST"
+                speed={0.03}
+                className="text-amber-500 font-bold"
+              />
+            </div>
+          )}
+
+          <div>{input.length} Chars</div>
         </div>
 
       </div>
