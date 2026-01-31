@@ -1,7 +1,7 @@
 import React from 'react';
-import { StudioProvider } from '../context/StudioContext.jsx';
+import { StudioProvider } from '../context/StudioContext';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Don't forget to import CSS!
+
 import StudioDashboard from '../StudioDashboard';
 
 // You might need to install 'lucide-react' if not already present for icons used in StudioDashboard
@@ -10,9 +10,7 @@ import StudioDashboard from '../StudioDashboard';
 function HomePage() {
   return (
     <StudioProvider>
-      {/* 1. Added 'z-[9999]' to ensure Toasts appear above all Modals 
-          2. Imported the CSS for Toastify (crucial if you haven't elsewhere)
-      */}
+ 
       <ToastContainer 
         className="z-[9999]" 
         position="top-right"
