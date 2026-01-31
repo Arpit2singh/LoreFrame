@@ -304,7 +304,7 @@ const DashFront = () => {
                   INPUT_PROMPT
                 </div>
                 <p className="text-sm font-mono text-slate-300 leading-relaxed">
-                  <span className="text-pink-500">>></span> cyberpunk city, 
+                  <span className="text-pink-500"></span> cyberpunk city, 
                   <span className="text-cyan-400"> neon lights</span>, 
                   rain reflection, 
                   <span className="text-yellow-400"> volumetric fog</span>...
