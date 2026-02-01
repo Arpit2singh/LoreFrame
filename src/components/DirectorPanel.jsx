@@ -9,16 +9,53 @@ import "./DirectorPanel.css";
 
 // 1. Define the Camera Options Data
 const CAMERA_OPTIONS = [
-  { label: "Eye-Level", value: " Camera sits at the subject’s eye height Feels neutral, honest, conversational.Used a lot in dramas and dialogue scenes ", desc: "Neutral, conversational, honest." },
-  { label: "High Angle", value: "Camera looks down on the subject. Makes the character seem smaller, weaker, vulnerable .Great for showing fear or loss of control.", desc: "Makes subject look smaller, weaker, vulnerable." },
-  { label: "Low Angle", value: "Camera looks up at the subject. Adds power, dominance, authority. Perfect for heroes, villains, or moments of confidence.", desc: "Adds power, dominance, authority." },
-  { label: "Bird's-Eye", value: "Bird's-Eye View", desc: "God-like, detached, shows chaos/patterns." },
-  { label: "Worm's-Eye", value: " Camera directly above the subject. Creates a god-like, detached feeling. Often used to show chaos, patterns, or isolation. ", desc: "Exaggerates height, makes things towering." },
-  { label: "Dutch Angle", value: "Camera very low, almost on the ground. Exaggerates height and strength. Makes buildings or characters feel towering and intense.", desc: "Tilted shot. Signals confusion or tension." },
-  { label: "Over-Shoulder", value: "Shot taken from behind one character, framing another. Pulls us into conversations and confrontations.", desc: "Conversation perspective." },
-  { label: "POV", value: "Camera becomes a character’s eyes. Creates immersion and emotional connection. ", desc: "Camera becomes character's eyes." },
-  { label: "Oblique", value: "Camera placed diagonally but not fully tilted. Adds subtle unease without being obvious.", desc: "Subtle unease without being fully tilted." },
+  {
+    label: "Eye-Level",
+    value: "The camera is positioned at the subject’s eye height, creating a neutral and balanced perspective. This shot feels natural and objective, often used in dialogue scenes to foster realism and emotional connection without visual bias.",
+    desc: "The camera is positioned at the subject’s eye height, creating a neutral and balanced perspective. This shot feels natural and objective, often used in dialogue scenes to foster realism and emotional connection without visual bias."
+  },
+  {
+    label: "High Angle",
+    value: "The camera is placed above the subject and angled downward. This perspective can make the subject appear smaller, weaker, or more vulnerable, often reinforcing themes of fear, submission, or loss of control.",
+    desc: "The camera is placed above the subject and angled downward. This perspective can make the subject appear smaller, weaker, or more vulnerable, often reinforcing themes of fear, submission, or loss of control."
+  },
+  {
+    label: "Low Angle",
+    value: "The camera is positioned below the subject and angled upward. This shot emphasizes power, dominance, authority, or confidence, commonly used to elevate heroes, villains, or moments of triumph.",
+    desc: "The camera is positioned below the subject and angled upward. This shot emphasizes power, dominance, authority, or confidence, commonly used to elevate heroes, villains, or moments of triumph."
+  },
+  {
+    label: "Bird’s-Eye View",
+    value: "The camera looks straight down from directly above the subject. This angle creates a detached, god-like perspective and is often used to reveal spatial relationships, patterns, chaos, or isolation within a scene.",
+    desc: "The camera looks straight down from directly above the subject. This angle creates a detached, god-like perspective and is often used to reveal spatial relationships, patterns, chaos, or isolation within a scene."
+  },
+  {
+    label: "Worm’s-Eye View",
+    value: "The camera is placed extremely low, often near ground level, looking upward. This exaggerated perspective amplifies height and scale, making subjects appear towering, imposing, or overwhelming.",
+    desc: "The camera is placed extremely low, often near ground level, looking upward. This exaggerated perspective amplifies height and scale, making subjects appear towering, imposing, or overwhelming."
+  },
+  {
+    label: "Dutch Angle",
+    value: "The camera is deliberately tilted off its horizontal axis. This technique introduces visual imbalance and is commonly used to convey psychological tension, disorientation, instability, or unease.",
+    desc: "The camera is deliberately tilted off its horizontal axis. This technique introduces visual imbalance and is commonly used to convey psychological tension, disorientation, instability, or unease."
+  },
+  {
+    label: "Over-the-Shoulder",
+    value: "The camera is positioned behind one character, partially framing their shoulder while focusing on another subject. This shot is frequently used in conversations to establish spatial relationships and emotional dynamics between characters.",
+    desc: "The camera is positioned behind one character, partially framing their shoulder while focusing on another subject. This shot is frequently used in conversations to establish spatial relationships and emotional dynamics between characters."
+  },
+  {
+    label: "Point-of-View",
+    value: "The camera adopts the visual perspective of a character, showing what they see. This approach immerses the audience directly into the character’s experience, enhancing identification and emotional engagement.",
+    desc: "The camera adopts the visual perspective of a character, showing what they see. This approach immerses the audience directly into the character’s experience, enhancing identification and emotional engagement."
+  },
+  {
+    label: "Oblique Angle",
+    value: "The camera is positioned at a slight diagonal without a pronounced tilt. This subtle deviation from standard framing introduces mild visual tension or unease while maintaining a grounded, realistic feel.",
+    desc: "The camera is positioned at a slight diagonal without a pronounced tilt. This subtle deviation from standard framing introduces mild visual tension or unease while maintaining a grounded, realistic feel."
+  }
 ];
+
 
 function RollingText({
   text = "ROLLING TEXT",
@@ -143,7 +180,7 @@ export default function DirectorPanel() {
       <div className="max-w-5xl mx-auto flex flex-col gap-2">
 
         {/* 🎬 NEW: Camera Suggestions Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar mask-gradient">
+        <div className="flex items-center gap-1 overflow-x-auto pb-2 no-scrollbar mask-gradient">
           <div className="flex items-center gap-1 text-zinc-500 text-xs font-bold uppercase tracking-wider px-2 shrink-0">
             <Video size={12} />
             <span>Angles</span>
@@ -169,11 +206,11 @@ export default function DirectorPanel() {
 
         {/* Input Container */}
 
-        <div className="relative group flex gap-3 items-stretch bg-[#1C1C1E] border border-zinc-800 rounded-2xl p-2 backdrop-blur-xl shadow-2xl hover:border-zinc-700 transition-colors z-0">
+        <div className="relative group flex gap-3 items-stretch bg-[#1C1C1E] border border-zinc-800 rounded-2xl p-2 backdrop-blur-xl shadow-2xl hover:border-zinc-700 transition-colors z-0 items-center ">
 
           {/* Dropdown/Select (Iska z-index high rakha hai taaki ye hamesha upar rahe) */}
           <select
-            className='bg-blue-400 outline-none cursor-pointer rounded-xl pl-4 pr-3 relative z-20 text-black font-medium'
+            className="bg-blue-400 outline-none cursor-pointer rounded-xl pl-4 pr-3 text-black font-medium h-12 flex items-center justify-center relative z-20 mt-2"
             value={Type}
             onChange={(e) => setType(e.target.value === "true")}
           >
@@ -193,7 +230,7 @@ export default function DirectorPanel() {
             placeholder={selectedCharacterId
               ? "Script your scene..."
               : "⚠️ Select a character to start scripting..."}
-            className="flex-1 bg-transparent px-4 py-3 resize-none outline-none text-zinc-200 placeholder:text-zinc-600 text-sm h-16 custom-scrollbar transition-all focus:h-24 relative z-0"
+            className="flex-1 bg-transparent px-4 py-3 resize-none outline-none text-zinc-200 placeholder:text-zinc-600 text-sm h-16 custom-scrollbar transition-all"
           />
 
           {/* Right Side Actions: Buttons ko z-20 diya hai taaki click hamesha work kare */}
