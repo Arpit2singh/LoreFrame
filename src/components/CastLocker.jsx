@@ -142,26 +142,34 @@ export default function CastLocker() {
   };
 
   const handleFixMemory = async (e, id) => {
-    e.stopPropagation();
-    const toastId = toast.loading("Recalibrating Neural Identity...");
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/characters/${id}/reextract-identity`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
+  e.stopPropagation();
+  const toastId = toast.loading("Recalibrating Neural Identity...");
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/characters/${id}/reextract-identity`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-      if (response.ok) {
-        toast.update(toastId, { render: "Identity Recalibrated", type: "success", isLoading: false, autoClose: 3000 });
-        const statusRes = await fetch(`${API_BASE_URL}/api/v1/characters/${id}/memory-status`);
-        const statusData = await statusRes.json();
-        setMemoryStatus(prev => ({ ...prev, [id]: statusData }));
-      } else {
-        throw new Error("API Error");
-      }
-    } catch (error) {
-      toast.update(toastId, { render: "Failed to repair memory", type: "error", isLoading: false, autoClose: 3000 });
+    if (response.ok) {
+      toast.update(toastId, { render: "Identity Recalibrated", type: "success", isLoading: false, autoClose: 3000 });
+      
+      const statusRes = await fetch(`${API_BASE_URL}/api/v1/characters/${id}/memory-status`);
+      const statusData = await statusRes.json();
+      
+      setMemoryStatus(prev => ({ ...prev, [id]: statusData }));
+      
+      setUserData(prev => 
+        prev.map(char =>
+          char.id === id ? { ...char, memoryStatus: statusData } : char
+        )
+      );
+    } else {
+      throw new Error("API Error");
     }
-  };
+  } catch (error) {
+    toast.update(toastId, { render: "Failed to repair memory", type: "error", isLoading: false, autoClose: 3000 });
+  }
+};
 
   const handleUpload = (e) => {
     const selectedFile = e.target.files[0];
@@ -457,7 +465,7 @@ export default function CastLocker() {
                       >
                         <Info size={14} />
                       </button>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
                         Info
                       </span>
                     </div>
@@ -472,7 +480,7 @@ export default function CastLocker() {
                       >
                         <Clock size={14} />
                       </button>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
                         History
                       </span>
                     </div>
@@ -487,7 +495,7 @@ export default function CastLocker() {
                       >
                         <Pencil size={14} />
                       </button>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
                         Edit
                       </span>
                     </div>
@@ -502,7 +510,7 @@ export default function CastLocker() {
                       >
                         <Trash2 size={14} />
                       </button>
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-[10px] rounded opacity-0 group-hover/tooltip:opacity-100 pointer-events-none whitespace-nowrap">
                         Delete
                       </span>
                     </div>
