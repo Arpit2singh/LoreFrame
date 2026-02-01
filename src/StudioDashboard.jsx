@@ -166,7 +166,7 @@ export default function StudioDashboard() {
               <ArrowLeft size={18} />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm leading-none">Lorven<span className="text-blue-500">AI</span></span>
+              <span className="font-bold text-sm leading-none">Lora<span className="text-blue-500">Frame</span></span>
               <span className="text-[10px] text-zinc-500">Dashboard</span>
             </div>
           </Link>

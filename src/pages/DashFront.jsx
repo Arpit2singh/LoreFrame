@@ -111,7 +111,7 @@ const DashFront = () => {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-bold tracking-tight leading-none">LoraFrame<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"></span></span>
+              <span className="text-2xl font-bold tracking-tight leading-none">Lora<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Frame</span></span>
               <span className="text-[10px] text-zinc-500 font-mono tracking-widest uppercase">Generative Engine</span>
             </div>
           </div>
