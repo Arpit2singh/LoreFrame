@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Zap, Activity, Layers, MoreHorizontal, X,
-  Cpu, HardDrive
+  Cpu, HardDrive, ArrowLeft
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -160,8 +161,15 @@ export default function StudioDashboard() {
         >
 
           {/* 1. Left: Brand */}
-          
-
+          <Link to="/" className="flex items-center gap-2 group cursor-pointer text-zinc-400 hover:text-white transition-colors">
+            <div className="p-2 rounded-lg bg-zinc-800/50 group-hover:bg-zinc-700/50 transition-colors">
+              <ArrowLeft size={18} />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-sm leading-none">Lorven<span className="text-blue-500">AI</span></span>
+              <span className="text-[10px] text-zinc-500">Dashboard</span>
+            </div>
+          </Link>
           {/* 2. Middle: Doodle Animation (Full Width of available space) */}
           {/* Constrained height (h-14) ensures it fits in header without pushing layout */}
           <div className="flex-1 h-14 relative overflow-hidden flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity duration-500">
