@@ -197,21 +197,15 @@ const DashFront = () => {
 
               {/* ACTION BUTTONS */}
               <div className="flex flex-wrap gap-5">
-                <button
-                  onClick={() => navigate('/Tool')}
-                  className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]"
+                <Link
+                  to="/Tool"
+                  className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] inline-flex items-center gap-3"
                 >
                   <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                  <Link
-                    to="/Tool"  // <--- This is the format
-                    className="group relative px-8 py-4 bg-white text-black rounded-lg font-bold text-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] inline-flex" // Added inline-flex to keep alignment
-                  >
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                    <span className="relative flex items-center gap-3">
-                      Start Creating <Sparkles size={18} className="text-indigo-600" />
-                    </span>
-                  </Link>
-                </button>
+                  <span className="relative flex items-center gap-3">
+                    Start Creating <Sparkles size={18} className="text-indigo-600" />
+                  </span>
+                </Link>
 
                 <button className="group px-8 py-4 bg-transparent border border-white/20 text-white rounded-lg font-bold text-lg hover:bg-white/5 hover:border-white/40 transition-all flex items-center gap-3 backdrop-blur-sm">
                   <Globe size={18} />
