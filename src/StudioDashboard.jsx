@@ -60,7 +60,7 @@ const TechHUD = () => {
         {isExpanded && (
           <motion.div
             layoutId="techHud"
-            className="absolute top-0 right-0 z-50 w-[340px] bg-[#1C1C1E] border border-zinc-800 rounded-[32px] overflow-hidden shadow-2xl p-2"
+            className="absolute top-0 right-0 z-[100] w-[340px] bg-[#1C1C1E] border border-zinc-800 rounded-[32px] overflow-hidden shadow-2xl p-2"
           >
             <div className="flex flex-col gap-2">
               {/* Header */}
@@ -156,18 +156,11 @@ export default function StudioDashboard() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-10 flex items-center gap-4"
+          className="shrink-0 h-16 px-6 border-b border-zinc-900 bg-[#111111]/50 backdrop-blur-md z-50 flex items-center gap-4"
         >
 
           {/* 1. Left: Brand */}
-          <div className="flex items-baseline gap-2 shrink-0">
-            <motion.h1
-              whileHover={{ scale: 1.05 }}
-              className="text-xl font-bold tracking-tighter text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] cursor-pointer"
-            >
-              LoraFrame
-            </motion.h1>
-          </div>
+          
 
           {/* 2. Middle: Doodle Animation (Full Width of available space) */}
           {/* Constrained height (h-14) ensures it fits in header without pushing layout */}
