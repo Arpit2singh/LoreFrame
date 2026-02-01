@@ -237,7 +237,14 @@ export default function CastLocker() {
       {/* --- HEADER --- */}
       <div className="p-5 border-b border-zinc-900 bg-[#111111]/80 backdrop-blur-md">
         <h2 className="flex items-center gap-2 text-xs font-bold text-zinc-400 uppercase tracking-[0.2em]">
-          <UserCircle2 size={16} className="text-blue-500" />
+         <div className="flex items-baseline gap-2 shrink-0">
+                     <motion.h1
+                       whileHover={{ scale: 1.05 }}
+                       className="text-xl font-bold tracking-tighter text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.5)] cursor-pointer"
+                     >
+                       LoraFrame
+                     </motion.h1>
+                   </div>
           <RollingText text="NEURAL CAST" speed={0.1} />
         </h2>
       </div>
@@ -562,63 +569,7 @@ export default function CastLocker() {
       </div>
 
       {/* --- GLOBAL FLOATING DOCK (Bottom) --- */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-          className="flex items-center gap-1 px-2 py-1.5 bg-[#1C1C1E]/90 border border-zinc-800 rounded-full shadow-2xl backdrop-blur-xl"
-        >
-          
-          <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative"
-          >
-            <Inbox size={20} strokeWidth={1.5} />
-            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-blue-500 rounded-full border border-[#1C1C1E]" />
-          </motion.button>
-          
-          <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
-          >
-            <ToggleLeft size={20} strokeWidth={1.5} />
-          </motion.button>
-          
-          <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
-          >
-            <Eye size={20} strokeWidth={1.5} />
-          </motion.button>
-
-          {/* Upload Button */}
-          <div className="relative group">
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-1.5 bg-black text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-              Add Identity
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={triggerFileUpload}
-              className="p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all"
-            >
-              <Upload size={20} strokeWidth={1.5} />
-            </motion.button>
-          </div>
-
-          <motion.button 
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="group p-2 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full transition-all relative"
-          >
-            <Menu size={20} strokeWidth={1.5} />
-          </motion.button>
-        </motion.div>
-      </div>
+   
 
     </aside>
   );
